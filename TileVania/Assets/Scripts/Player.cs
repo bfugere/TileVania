@@ -37,9 +37,9 @@ public class Player : MonoBehaviour
 
     void FlipSprite()
     {
-        bool ifPlayerIsMovingHorizontally = Mathf.Abs(rigidBody.velocity.x) > Mathf.Epsilon;
+        bool playerIsMovingHorizontally = Mathf.Abs(rigidBody.velocity.x) > Mathf.Epsilon;
 
-        if (ifPlayerIsMovingHorizontally)
+        if (playerIsMovingHorizontally)
             transform.localScale = new Vector2(Mathf.Sign(rigidBody.velocity.x), 1f);
     }
 }
