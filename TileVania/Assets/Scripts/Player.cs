@@ -5,34 +5,42 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float runSpeed = 5f;
-    [SerializeField] float jumpHeight = 5f;
+    [SerializeField] float jumpHeight = 13f;
 
     Rigidbody2D rigidBody;
+    Animator animator;
+    Collider2D collider2D;
     
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        collider2D = GetComponent<Collider2D>();
     }
 
     void Update()
     {
         Run();
+        Jump();
         FlipSprite();
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            Jump();
     }
 
     void Run()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
-
         rigidBody.velocity = new Vector2(horizontalMovement * runSpeed, rigidBody.velocity.y);
+
+        bool playerIsMovingHorizontally = Mathf.Abs(rigidBody.velocity.x) > Mathf.Epsilon;
+        animator.SetBool("isRunning", playerIsMovingHorizontally);
     }
 
     void Jump()
     {
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpHeight);
+        if (!collider2D.IsTouchingLayers(LayerMask.GetMask("Ground")))
+            return;
+        
+        if (Input.GetButtonDown("Jump"))
+            rigidBody.velocity = new Vector2(0f, jumpHeight);
     }
 
     void FlipSprite()
