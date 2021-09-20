@@ -27,8 +27,13 @@ public class EnemyMovement : MonoBehaviour
         return transform.localScale.x > 0;
     }
 
-    void OnTriggerExit2D(Collider2D collision)
+    void TurnEnemyAround()
     {
         transform.localScale = new Vector2(-Mathf.Sign(myRigidBody2D.velocity.x), 1f);
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        TurnEnemyAround();
     }
 }
