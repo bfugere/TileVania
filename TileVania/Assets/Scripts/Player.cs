@@ -7,12 +7,15 @@ public class Player : MonoBehaviour
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
     [SerializeField] float jumpHeight = 13f;
+    [SerializeField] Vector2 deathForce = new Vector2(5f, 10f);
+
+    bool isDead = false;
+    float gravityScaleAtStart;
 
     Rigidbody2D myRigidBody2D;
     Animator myAnimator;
     CapsuleCollider2D myBodyCollider2D;
     BoxCollider2D myFeetCollider2D;
-    float gravityScaleAtStart;
     
     void Start()
     {
@@ -26,9 +29,13 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (isDead)
+            return;
+
         Run();
         Jump();
         Climb();
+        Death();
         FlipSprite();
     }
 
@@ -73,6 +80,16 @@ public class Player : MonoBehaviour
 
         if (myRigidBody2D.gravityScale == 0 && verticalMovement != 0)
             myAnimator.SetBool("isClimbingIdle", false);
+    }
+
+    void Death()
+    {
+        if (myBodyCollider2D.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            isDead = true; 
+            myAnimator.SetTrigger("isDead");
+            myRigidBody2D.velocity = deathForce;
+        }
     }
 
     void FlipSprite()
