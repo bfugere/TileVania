@@ -89,6 +89,7 @@ public class Player : MonoBehaviour
             isDead = true; 
             myAnimator.SetTrigger("isDead");
             myRigidBody2D.velocity = deathForce;
+            FindObjectOfType<GameManager>().HandlePlayerDeath();
         }
     }
 
