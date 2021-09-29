@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
     [SerializeField] float jumpHeight = 13f;
+    [SerializeField] float deathDelayTime = 2f;
     [SerializeField] Vector2 deathForce = new Vector2(5f, 10f);
 
     bool isDead = false;
@@ -85,12 +86,7 @@ public class Player : MonoBehaviour
     void Death()
     {
         if (myBodyCollider2D.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
-        {
-            isDead = true; 
-            myAnimator.SetTrigger("isDead");
-            myRigidBody2D.velocity = deathForce;
-            FindObjectOfType<GameManager>().HandlePlayerDeath();
-        }
+            StartCoroutine(PlayerDeathDelay());
     }
 
     void FlipSprite()
@@ -99,5 +95,15 @@ public class Player : MonoBehaviour
 
         if (playerIsMovingHorizontally)
             transform.localScale = new Vector2(Mathf.Sign(myRigidBody2D.velocity.x), 1f);
+    }
+
+    IEnumerator PlayerDeathDelay()
+    {
+        isDead = true;
+        myAnimator.SetTrigger("isDead");
+        myRigidBody2D.velocity = deathForce;
+
+        yield return new WaitForSecondsRealtime(deathDelayTime);
+        FindObjectOfType<GameManager>().HandlePlayerDeath();
     }
 }
