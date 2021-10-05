@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(gameOverDelayTime);
         SceneManager.LoadScene(0);
+        Destroy(FindObjectOfType<ScenePersist>().gameObject);
         Destroy(gameObject);
     }
 }
