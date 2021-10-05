@@ -7,7 +7,9 @@ public class Player : MonoBehaviour
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
     [SerializeField] float jumpHeight = 13f;
-    [SerializeField] float deathDelayTime = 2f;
+    [SerializeField] float deathDelayTime = 4f;
+    [SerializeField] AudioClip deathSFX;
+    [SerializeField] [Range(0, 1)] float deathVolume = 0.1f;
     [SerializeField] Vector2 deathForce = new Vector2(5f, 10f);
 
     bool isDead = false;
@@ -102,6 +104,8 @@ public class Player : MonoBehaviour
         isDead = true;
         myAnimator.SetTrigger("isDead");
         myRigidBody2D.velocity = deathForce;
+        AudioSource.PlayClipAtPoint(deathSFX, Camera.main.transform.position, deathVolume);
+        FindObjectOfType<Camera>().GetComponent<AudioSource>().Pause();
 
         yield return new WaitForSecondsRealtime(deathDelayTime);
         FindObjectOfType<GameManager>().HandlePlayerDeath();

@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text livesText;
     [SerializeField] Text scoreText;
 
+    [SerializeField] float gameOverDelayTime = 3.5f;
+    [SerializeField] AudioClip gameOverSFX;
+    [SerializeField] [Range(0, 1)] float gameOverVolume = 0.1f;
+
     void Awake()
     {
         int numberOfGameManagers = FindObjectsOfType<GameManager>().Length;
@@ -35,7 +39,7 @@ public class GameManager : MonoBehaviour
         if (playerLives > 1)
             RemoveLife();
         else
-            ResetGameManager();
+            StartCoroutine(ResetGameManager());
     }
 
     public void AddToScore(int pointsToAdd)
@@ -52,8 +56,11 @@ public class GameManager : MonoBehaviour
         livesText.text = playerLives.ToString();
     }
 
-    private void ResetGameManager()
+    IEnumerator ResetGameManager()
     {
+        AudioSource.PlayClipAtPoint(gameOverSFX, Camera.main.transform.position, gameOverDelayTime);
+
+        yield return new WaitForSecondsRealtime(gameOverDelayTime);
         SceneManager.LoadScene(0);
         Destroy(gameObject);
     }

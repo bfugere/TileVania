@@ -307,3 +307,6 @@ MonoBehaviour:
   playerScore: 0
   livesText: {fileID: 1168732231}
   scoreText: {fileID: 277076452}
+  gameOverDelayTime: 3.5
+  gameOverSFX: {fileID: 8300000, guid: a7e36f5a71278c64b8c4b3a9b2111621, type: 3}
+  gameOverVolume: 0.1
